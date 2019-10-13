@@ -6,11 +6,12 @@ class Request extends CI_Controller {
 	public function create()
 	{
 		try{
+			$this->load->model('Request_model', '', TRUE);
 			$this->load->library('form_validation');
 
 			$request = json_decode($this->security->xss_clean($this->input->raw_input_stream), true);
 
-			$this->form_validation->set_data($request);
+			$this->form_validation->set_data($request['request']);
 
 			$this->form_validation->set_rules(array(
 				array(
@@ -78,7 +79,7 @@ class Request extends CI_Controller {
 
 			$response = array(
 				'code' => 201,
-				'request' => $request
+				'request' => $this->Request_model->create($request['request'])
 			);
 		}catch(\Exception $e){
 			$response = array(
@@ -90,5 +91,21 @@ class Request extends CI_Controller {
 		}finally {
 			$this->response = $response;
 		}
+	}
+
+	public function getById(int $requestId)
+	{
+		try{
+
+		}catch(\Exception $e){
+
+		}finally {
+
+		}
+	}
+
+	public function nullable()
+	{
+		$this->response = true;
 	}
 }

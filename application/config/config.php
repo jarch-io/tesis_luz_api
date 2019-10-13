@@ -324,7 +324,7 @@ $config['cache_query_string'] = FALSE;
 | https://codeigniter.com/user_guide/libraries/encryption.html
 |
 */
-$config['encryption_key'] = '';
+$config['encryption_key'] = 'la Mon4 s3 VISTE de s3d4!';
 
 /*
 |--------------------------------------------------------------------------

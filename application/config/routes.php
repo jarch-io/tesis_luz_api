@@ -55,7 +55,16 @@ $route['translate_uri_dashes'] = FALSE;
 
 #customers
 
+$route['v1/quotes']['options'] = "REST/v1/quotes/Quote/nullable";
+$route['v1/quotes']['post'] = "REST/v1/quotes/Quote/create";
+$route['v1/quotes/(:num)']['options'] = "REST/v1/quotes/Quote/nullable";
+$route['v1/quotes/(:num)']['put'] = "REST/v1/quotes/Quote/update/$1";
+$route['v1/quotes/(:num)']['get'] = "REST/v1/quotes/Quote/getById/$1";
+
+$route['v1/requests']['options'] = "REST/v1/requests/Request/nullable";
 $route['v1/requests']['post'] = "REST/v1/requests/Request/create";
+$route['v1/requests/(:num)']['options'] = "REST/v1/requests/Request/nullable";
+$route['v1/requests/(:num)']['get'] = "REST/v1/requests/Request/getById/$1";
 
 $route['v1/services']['get'] = "REST/v1/services/Service/list";
 
