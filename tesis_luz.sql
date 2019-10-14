@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS `area` (
   `name` varchar(50) NOT NULL,
   `detail` varchar(250) DEFAULT NULL,
   `status` tinyint(3) unsigned NOT NULL,
-  `create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `create_at` timestamp NOT NULL DEFAULT '1990-01-01 12:00:12',
   `update_at` timestamp NOT NULL DEFAULT '1990-01-01 12:00:12',
   PRIMARY KEY (`id_area`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
