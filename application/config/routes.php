@@ -65,7 +65,15 @@ $route['v1/requests']['options'] = "REST/v1/requests/Request/nullable";
 $route['v1/requests']['post'] = "REST/v1/requests/Request/create";
 $route['v1/requests/(:num)']['options'] = "REST/v1/requests/Request/nullable";
 $route['v1/requests/(:num)']['get'] = "REST/v1/requests/Request/getById/$1";
+$route['v1/requests/(:num)/comments']['options'] = "REST/v1/requests/Request/nullable";
+$route['v1/requests/(:num)/comments']['post'] = "REST/v1/requests/Request/addComment/$1";
 
 $route['v1/services']['get'] = "REST/v1/services/Service/list";
 
 #admin
+$route['v1/secure/requests']['options'] = "REST/v1/secure/requests/Request/nullable";
+$route['v1/secure/requests']['get'] = "REST/v1/secure/requests/Request/list";
+$route['v1/secure/requests/(:num)/assigns']['options'] = "REST/v1/secure/requests/Request/nullable";
+$route['v1/secure/requests/(:num)/assigns']['put'] = "REST/v1/secure/requests/Request/assign/$1";
+$route['v1/secure/requests/(:num)/comments']['options'] = "REST/v1/secure/requests/Request/nullable";
+$route['v1/secure/requests/(:num)/comments']['post'] = "REST/v1/secure/requests/Request/addComment/$1";

@@ -26,7 +26,6 @@ class Request_model extends CI_Model {
 			'ticket' => $request->code,
 			'created' => $request->create_at,
 			'updated' => $request->update_at,
-			'isClosed' => (bool) $request->is_closed,
 			'services' => array(),
 			'offers' => array(),
 			'progress' => array(),
@@ -44,17 +43,6 @@ class Request_model extends CI_Model {
 				)
 			)
 		);
-
-		if(!is_null($request->id_employee)) {
-			$employee = $this->db->select('employee.id_employee AS id, person.firstname AS firstName, person.lastname AS lastName, person.email, person.telephone, person.phone')
-							->where('employee.id_employee', $request->id_employee)
-							->from('employee')
-							->join('person', 'person.id_person = employee.id_person')
-							->get()
-							->result_array()[0];
-
-			$requestObject['adviser'] = $employee;
-		}
 
 		foreach ($requestItems as $service) {
 			$requestObject['services'][] = array(
@@ -95,108 +83,102 @@ class Request_model extends CI_Model {
 			'name' => $customer->name ?? ''
 		);
 
-		$requestObject['history'] = $this->getHistory($requestId);
+		$history = $this->db->select('id_request_history AS id, id_status_request AS status, comment AS message, from_type AS type, from_id AS agent, create_at AS createAt, update_at AS updateAt')
+							->where('id_request', $request->id_request)
+							->order_by('update_at', 'desc')
+							->get('request_history')
+							->result_array();
+
+		$requestObject['history'] = $history;
 
 		return $requestObject;
 	}
 
-	public function create(array $request)
+	public function listar(array $querys = array())
 	{
-		try{
-			//$this->load->library('encrypt');
-			$this->db->trans_start();
+		$requests = $this->db->select('*');
 
-			if(empty($request)) throw new \Exception("Ingrese datos de la solicitud que desea realizar.", 400);
+		if(!empty($filters = $querys['filter'])) {
+			if(isset($filters['adviser']) && $filters['adviser'] == '_NULL_') $requests->where('id_employee IS NULL', null, false);
+			if(isset($filters['adviser']) && $filters['adviser'] == '_ME_') $requests->where('id_employee', 1);
 
-			$customer = $request['customer'];
-
-			if($customer['isCompany']) {
-				$this->db->insert('company', array(
-					'name' => $customer['name'] ?? '',
-					'brand_name' => $customer['brandName'] ?? '',
-					'document_number' => $customer['ruc'] ?? '',
-					'telephone' => $customer['telephone'] ?? '',
-					'phone' => $customer['phone'] ?? '',
-					'email' => $customer['email'] ?? '',
-					'street' => $customer['street'] ?? '',
-					'state' => 1
-				));
-			}else {
-				$this->db->insert('person', array(
-					'firstname' => $customer['firstname'] ?? '',
-					'lastname' => $customer['lastname'] ?? '',
-					'email' => $customer['email'] ?? '',
-					'telephone' => $customer['telephone'] ?? '',
-					'phone' => $customer['phone'] ?? '',
-					'street' => $customer['street'] ?? '',
-					'document_type' => $customer['documentType'] ?? '',
-					'document_number' => $customer['document'] ?? '',
-					'state' => 1
-				));
-			}
-
-			$customerId = $this->db->insert_id();
-
-			$this->db->insert('customer', array(
-				'type' => $customer['isCompany'] ? 'company' : 'person',
-				'id_company' => $customer['isCompany'] ? $customerId : null,
-				'id_person' => $customer['isCompany'] ? null : $customerId,
-				'status' => 1
-			));
-
-			$customerMainId = $this->db->insert_id();
-
-			//$requestCode = $this->encrypt->encode(date('U') . $this->security->get_random_bytes(5), $this->secretMessage);
-			$requestCode = str_shuffle(date('U') . 'dmskadm4g5f4gSADASDAD345345!$#$%&%&$');
-
-			$this->db->insert('request', array(
-				'code' => $requestCode,
-				'id_customer' => $customerMainId,
-				'id_request_status' => 1,
-				'quote_id' => $request['quote']['id'],
-				'detail' => $request['additionals']['comment'] ?? ''
-			));
-
-			$requestId = $this->db->insert_id();
-
-			foreach ($request['quote']['items'] as $service) {
-				$this->db->insert('request_item', array(
-					'id_service' => $service['service'],
-					'id_request' => $requestId,
-					'quantity' => $service['quantity'],
-					'price' => $service['price'],
-					'discount' => 0,
-					'amount' => $service['quantity'] * $service['price']
-				));
-			}
-
-			$passwordCustomer = '';
-
-			if($request['additionals']['sendPassword']) {
-				$passwordCustomer = str_shuffle('dmskadm4g5f4gSADASDAD345345!$#$%&%&$');
-			}
-
-			$this->db->insert('request_history', array(
-				'id_status_request' => 1,
-				'id_request' => $requestId,
-				'comment' => $request['additionals']['comment'] ?? '',
-				'from_type' => 'customer',
-				'from_id' => $customerMainId
-			));
-
-			if($this->db->trans_status() === FALSE) throw new \Exception("No se puedo crear la solicitud.", 500);
-
-			$this->db->trans_commit();
-
-			return array(
-				'id' => $requestId,
-				'code' => $requestCode,
-				'password' => $passwordCustomer
-			);
-		}catch(\Exception $e){
-			$this->db->trans_rollback();
-			throw new \Exception($e->getMessage(), $e->getCode());
+			if(isset($filters['isClosed'])) $requests->where('is_closed =', (int) $filters['isClosed']);
 		}
+
+		$requests = $requests->get('request')
+						->result_array();
+
+		$listRequest = array();
+
+		$states = array();
+
+		$customers = array();
+
+		foreach ($requests as $request) {
+			$requestObject = array(
+				'id' => (int) $request['id_request'],
+				'isClosed' => (bool) $request['is_closed'],
+				'rating' => (int) $request['satisfactory_rating'],
+				'createAt' => $request['create_at'],
+				'updateAt' => $request['update_at']
+			);
+
+			if(!is_null($request['id_request_status']) && !isset($states[$request['id_request_status']])) {
+				$status = $this->db->where('id_status', $request['id_request_status'])
+						->get('status_request')
+						->result_array()[0];
+
+				$states[$status['id_status']] = $status;
+			}
+
+			$status = $states[$request['id_request_status']];
+
+			$requestObject['status'] = array(
+				'id' => (int) $status['id_status'],
+				'name' => $status['name'],
+				'detail' => $status['detail'],
+				'position' => (int) $status['position']
+			);
+
+			if(!isset($customers[$request['id_customer']])) {
+				$customer = $this->db->where('id_customer', $request['id_customer'])
+							->get('customer')
+							->result_array()[0];
+
+				$isCompany = $customer['type'] == 'company';
+
+				$customerExact = $this->db->where($isCompany ? 'id_company' : 'id_person',  $isCompany ? $customer['id_company'] : $customer['id_person'])
+									->get($isCompany ? 'company' : 'person')
+									->result_array()[0];
+
+				$customers[$customer['id_customer']] = array(
+					'id' => (int) $customer['id_customer'],
+					'type' => $customer['type'],
+					'firstName' => $customerExact['firstname'] ?? '',
+					'lastName' => $customerExact['lastname'] ?? '',
+					'email' => $customerExact['email'] ?? '',
+					'phone' => $customerExact['phone'] ?? '',
+					'telephone' => $customerExact['telephone'] ?? '',
+					'name' => $customerExact['name'] ?? '',
+					'brandName' => $customerExact['brand_name'] ?? ''
+				);
+			}
+
+			$requestObject['customer'] = $customers[$request['id_customer']];
+
+			$listRequest[] = $requestObject;
+		}
+
+		return $listRequest;
+	}
+
+	public function assign(int $requestId, array $adviser)
+	{
+		$this->db->set('id_employee', $adviser['id'] == '_ME_' ? 1 : $adviser['id'])
+					->where('id_request', $requestId)
+					->update('request');
+
+		return array();
 	}
 
 	public function getHistory(int $requestId)
@@ -217,8 +199,8 @@ class Request_model extends CI_Model {
 				'id_status_request' => null,
 				'id_request' => $requestId,
 				'comment' => $comment['message'] ?? '',
-				'from_type' => 'customer',
-				'from_id' => $comment['fromId']
+				'from_type' => 'adviser',
+				'from_id' => 1
 			));
 
 			if($this->db->trans_status() === FALSE) throw new \Exception("No se puedo agregar el comentario.", 500);
