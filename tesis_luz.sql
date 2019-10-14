@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `area` (
   `detail` varchar(250) DEFAULT NULL,
   `status` tinyint(3) unsigned NOT NULL,
   `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_area`),
   FULLTEXT KEY `name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `company` (
   `street` varchar(250) DEFAULT NULL,
   `state` tinyint(4) unsigned NOT NULL,
   `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_company`),
   KEY `FK_company_ubigeo` (`id_ubigeo`),
   FULLTEXT KEY `name_brand_document` (`name`,`brand_name`),
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS `customer` (
   `id_person` int(10) unsigned DEFAULT NULL,
   `status` tinyint(3) unsigned NOT NULL,
   `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_customer`),
   KEY `FK_customer_company` (`id_company`),
   KEY `FK_customer_person` (`id_person`),
@@ -118,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `customer_user` (
   `status` tinyint(4) NOT NULL,
   `last_access` timestamp NOT NULL,
   `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_user`),
   UNIQUE KEY `email_unique` (`username`),
   KEY `FK__customer` (`id_customer`),
@@ -139,7 +139,7 @@ CREATE TABLE IF NOT EXISTS `employee` (
   `id_position` int(10) unsigned NOT NULL,
   `status` tinyint(3) unsigned NOT NULL,
   `create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `update_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_employee`),
   KEY `FK__person` (`id_person`),
   KEY `FK_employee_area` (`id_area`),
@@ -163,7 +163,7 @@ CREATE TABLE IF NOT EXISTS `employee_service` (
   `id_service` int(10) unsigned NOT NULL,
   `status` tinyint(3) unsigned NOT NULL,
   `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_employee_service`),
   KEY `FK_employee_service_employee` (`id_employee`),
   KEY `FK_employee_service_service` (`id_service`),
@@ -188,7 +188,7 @@ CREATE TABLE IF NOT EXISTS `employee_user` (
   `id_role` int(10) unsigned NOT NULL,
   `is_locked` bit(1) NOT NULL DEFAULT b'0',
   `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_user`),
   UNIQUE KEY `email_unique` (`username`),
   KEY `FK__employee` (`id_employee`),
@@ -214,7 +214,7 @@ CREATE TABLE IF NOT EXISTS `offer` (
   `discount` decimal(10,2) NOT NULL COMMENT 'Monto a aplicar',
   `to` timestamp NOT NULL,
   `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_offer`),
   FULLTEXT KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -231,7 +231,7 @@ CREATE TABLE IF NOT EXISTS `offer_service` (
   `id_service` int(10) unsigned NOT NULL,
   `status` tinyint(3) unsigned NOT NULL,
   `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_offer_service`),
   KEY `FK_offer_service_offer` (`id_offer`),
   KEY `FK_offer_service_service` (`id_service`),
@@ -258,7 +258,7 @@ CREATE TABLE IF NOT EXISTS `person` (
   `document_number` varchar(25) NOT NULL,
   `state` tinyint(3) unsigned NOT NULL,
   `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_person`),
   KEY `Email` (`email`) /*!80000 INVISIBLE */,
   KEY `FK_person_ubigeo` (`id_ubigeo`),
@@ -300,7 +300,7 @@ CREATE TABLE IF NOT EXISTS `position_office` (
   `detail` varchar(255) DEFAULT NULL,
   `status` tinyint(3) unsigned NOT NULL,
   `create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `update_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_position`),
   FULLTEXT KEY `name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -317,7 +317,7 @@ CREATE TABLE IF NOT EXISTS `quote` (
   `quote_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `status` bit(1) DEFAULT NULL,
   `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`quote_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -382,7 +382,7 @@ CREATE TABLE IF NOT EXISTS `quote_item` (
   `service_id` int(10) unsigned NOT NULL DEFAULT '0',
   `quantity` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`item_id`),
   KEY `FK_quote_item_quote` (`quote_id`),
   KEY `FK_quote_item_service` (`service_id`),
@@ -471,7 +471,7 @@ CREATE TABLE IF NOT EXISTS `request` (
   `satisfactory_rating` tinyint(3) unsigned DEFAULT NULL,
   `detail` varchar(250) DEFAULT NULL,
   `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_request`),
   KEY `FK__offer` (`id_offer`),
   KEY `FK__employee` (`id_employee`),
@@ -525,7 +525,7 @@ CREATE TABLE IF NOT EXISTS `request_history` (
   `from_type` varchar(150) DEFAULT NULL,
   `from_id` int(11) DEFAULT NULL,
   `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_request_history`),
   KEY `FK_request_history_status_request` (`id_status_request`),
   KEY `FK_request_history_request` (`id_request`),
@@ -604,7 +604,7 @@ CREATE TABLE IF NOT EXISTS `request_item` (
   `discount` decimal(10,2) unsigned NOT NULL,
   `amount` decimal(10,2) unsigned NOT NULL,
   `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_item`),
   KEY `FK_request_item_service` (`id_service`),
   KEY `FK_request_item_request` (`id_request`),
@@ -672,7 +672,7 @@ CREATE TABLE IF NOT EXISTS `service` (
   `price` decimal(10,2) NOT NULL,
   `status` tinyint(3) unsigned NOT NULL,
   `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_service`),
   FULLTEXT KEY `title` (`title`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -695,7 +695,7 @@ CREATE TABLE IF NOT EXISTS `status_request` (
   `position` smallint(5) unsigned NOT NULL,
   `status` tinyint(3) unsigned NOT NULL,
   `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_status`),
   FULLTEXT KEY `name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -721,7 +721,7 @@ CREATE TABLE IF NOT EXISTS `ubigeo` (
   `parent_id` int(11) DEFAULT NULL,
   `state` tinyint(3) unsigned NOT NULL,
   `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_ubigeo`),
   FULLTEXT KEY `code_name` (`code`,`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -738,7 +738,7 @@ CREATE TABLE IF NOT EXISTS `user_rol` (
   `code` varchar(25) NOT NULL,
   `status` tinyint(3) unsigned NOT NULL,
   `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_role`),
   FULLTEXT KEY `code_status` (`code`,`nombre`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
