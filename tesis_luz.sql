@@ -20,8 +20,7 @@ CREATE TABLE IF NOT EXISTS `area` (
   `status` tinyint(3) unsigned NOT NULL,
   `create_at` timestamp NULL DEFAULT NULL,
   `update_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id_area`),
-  FULLTEXT KEY `name` (`name`)
+  PRIMARY KEY (`id_area`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla tesis_luz.area: ~0 rows (aproximadamente)
@@ -47,8 +46,6 @@ CREATE TABLE IF NOT EXISTS `company` (
   `update_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id_company`),
   KEY `FK_company_ubigeo` (`id_ubigeo`),
-  FULLTEXT KEY `name_brand_document` (`name`,`brand_name`),
-  FULLTEXT KEY `email` (`email`),
   CONSTRAINT `FK_company_ubigeo` FOREIGN KEY (`id_ubigeo`) REFERENCES `ubigeo` (`id_ubigeo`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -122,7 +119,6 @@ CREATE TABLE IF NOT EXISTS `customer_user` (
   PRIMARY KEY (`id_user`),
   UNIQUE KEY `email_unique` (`username`),
   KEY `FK__customer` (`id_customer`),
-  FULLTEXT KEY `email_index` (`username`),
   CONSTRAINT `FK__customer` FOREIGN KEY (`id_customer`) REFERENCES `customer` (`id_customer`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -193,7 +189,6 @@ CREATE TABLE IF NOT EXISTS `employee_user` (
   UNIQUE KEY `email_unique` (`username`),
   KEY `FK__employee` (`id_employee`),
   KEY `FK_employee_user_user_rol` (`id_role`),
-  FULLTEXT KEY `username_index` (`username`),
   CONSTRAINT `FK_employee_user_employee` FOREIGN KEY (`id_employee`) REFERENCES `employee` (`id_employee`),
   CONSTRAINT `FK_employee_user_user_rol` FOREIGN KEY (`id_role`) REFERENCES `user_rol` (`id_role`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -216,7 +211,6 @@ CREATE TABLE IF NOT EXISTS `offer` (
   `create_at` timestamp NULL DEFAULT NULL,
   `update_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id_offer`),
-  FULLTEXT KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla tesis_luz.offer: ~0 rows (aproximadamente)
@@ -262,7 +256,6 @@ CREATE TABLE IF NOT EXISTS `person` (
   PRIMARY KEY (`id_person`),
   KEY `Email` (`email`) /*!80000 INVISIBLE */,
   KEY `FK_person_ubigeo` (`id_ubigeo`),
-  FULLTEXT KEY `Search` (`firstname`,`lastname`,`document_number`) /*!80000 INVISIBLE */,
   CONSTRAINT `FK_person_ubigeo` FOREIGN KEY (`id_ubigeo`) REFERENCES `ubigeo` (`id_ubigeo`)
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -301,8 +294,7 @@ CREATE TABLE IF NOT EXISTS `position_office` (
   `status` tinyint(3) unsigned NOT NULL,
   `create_at` timestamp NOT NULL DEFAULT NULL,
   `update_at` timestamp NOT NULL DEFAULT NULL,
-  PRIMARY KEY (`id_position`),
-  FULLTEXT KEY `name` (`name`)
+  PRIMARY KEY (`id_position`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla tesis_luz.position_office: ~0 rows (aproximadamente)
@@ -478,7 +470,6 @@ CREATE TABLE IF NOT EXISTS `request` (
   KEY `FK__customer_request` (`id_customer`),
   KEY `FK_request_status_request` (`id_request_status`),
   KEY `FK_request_quote` (`quote_id`),
-  FULLTEXT KEY `code` (`code`),
   CONSTRAINT `FK__customer_request` FOREIGN KEY (`id_customer`) REFERENCES `customer` (`id_customer`),
   CONSTRAINT `FK__employee` FOREIGN KEY (`id_employee`) REFERENCES `employee` (`id_employee`),
   CONSTRAINT `FK__offer` FOREIGN KEY (`id_offer`) REFERENCES `offer` (`id_offer`),
@@ -673,8 +664,7 @@ CREATE TABLE IF NOT EXISTS `service` (
   `status` tinyint(3) unsigned NOT NULL,
   `create_at` timestamp NULL DEFAULT NULL,
   `update_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id_service`),
-  FULLTEXT KEY `title` (`title`)
+  PRIMARY KEY (`id_service`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla tesis_luz.service: ~4 rows (aproximadamente)
@@ -696,8 +686,7 @@ CREATE TABLE IF NOT EXISTS `status_request` (
   `status` tinyint(3) unsigned NOT NULL,
   `create_at` timestamp NULL DEFAULT NULL,
   `update_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id_status`),
-  FULLTEXT KEY `name` (`name`)
+  PRIMARY KEY (`id_status`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla tesis_luz.status_request: ~0 rows (aproximadamente)
@@ -722,8 +711,7 @@ CREATE TABLE IF NOT EXISTS `ubigeo` (
   `state` tinyint(3) unsigned NOT NULL,
   `create_at` timestamp NULL DEFAULT NULL,
   `update_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id_ubigeo`),
-  FULLTEXT KEY `code_name` (`code`,`name`)
+  PRIMARY KEY (`id_ubigeo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla tesis_luz.ubigeo: ~0 rows (aproximadamente)
@@ -739,8 +727,7 @@ CREATE TABLE IF NOT EXISTS `user_rol` (
   `status` tinyint(3) unsigned NOT NULL,
   `create_at` timestamp NULL DEFAULT NULL,
   `update_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id_role`),
-  FULLTEXT KEY `code_status` (`code`,`nombre`)
+  PRIMARY KEY (`id_role`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla tesis_luz.user_rol: ~0 rows (aproximadamente)
