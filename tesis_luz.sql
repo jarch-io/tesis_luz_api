@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `area` (
   `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_area`),
   FULLTEXT KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4;
 
 -- Volcando datos para la tabla tesis_luz.area: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `area` DISABLE KEYS */;
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `company` (
   FULLTEXT KEY `name_brand_document` (`name`,`brand_name`),
   FULLTEXT KEY `email` (`email`),
   CONSTRAINT `FK_company_ubigeo` FOREIGN KEY (`id_ubigeo`) REFERENCES `ubigeo` (`id_ubigeo`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4;
 
 -- Volcando datos para la tabla tesis_luz.company: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `company` DISABLE KEYS */;
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `customer` (
   KEY `FK_customer_person` (`id_person`),
   CONSTRAINT `FK_customer_company` FOREIGN KEY (`id_company`) REFERENCES `company` (`id_company`),
   CONSTRAINT `FK_customer_person` FOREIGN KEY (`id_person`) REFERENCES `person` (`id_person`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4;
 
 -- Volcando datos para la tabla tesis_luz.customer: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `customer` DISABLE KEYS */;
@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS `customer_user` (
   KEY `FK__customer` (`id_customer`),
   FULLTEXT KEY `email_index` (`username`),
   CONSTRAINT `FK__customer` FOREIGN KEY (`id_customer`) REFERENCES `customer` (`id_customer`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4;
 
 -- Volcando datos para la tabla tesis_luz.customer_user: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `customer_user` DISABLE KEYS */;
@@ -147,7 +147,7 @@ CREATE TABLE IF NOT EXISTS `employee` (
   CONSTRAINT `FK__person` FOREIGN KEY (`id_person`) REFERENCES `person` (`id_person`),
   CONSTRAINT `FK_employee_area` FOREIGN KEY (`id_area`) REFERENCES `area` (`id_area`),
   CONSTRAINT `FK_employee_position_office` FOREIGN KEY (`id_position`) REFERENCES `position_office` (`id_position`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4;
 
 -- Volcando datos para la tabla tesis_luz.employee: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `employee` DISABLE KEYS */;
@@ -169,7 +169,7 @@ CREATE TABLE IF NOT EXISTS `employee_service` (
   KEY `FK_employee_service_service` (`id_service`),
   CONSTRAINT `FK_employee_service_employee` FOREIGN KEY (`id_employee`) REFERENCES `employee` (`id_employee`),
   CONSTRAINT `FK_employee_service_service` FOREIGN KEY (`id_service`) REFERENCES `service` (`id_service`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4;
 
 -- Volcando datos para la tabla tesis_luz.employee_service: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `employee_service` DISABLE KEYS */;
@@ -196,7 +196,7 @@ CREATE TABLE IF NOT EXISTS `employee_user` (
   FULLTEXT KEY `username_index` (`username`),
   CONSTRAINT `FK_employee_user_employee` FOREIGN KEY (`id_employee`) REFERENCES `employee` (`id_employee`),
   CONSTRAINT `FK_employee_user_user_rol` FOREIGN KEY (`id_role`) REFERENCES `user_rol` (`id_role`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4;
 
 -- Volcando datos para la tabla tesis_luz.employee_user: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `employee_user` DISABLE KEYS */;
@@ -217,7 +217,7 @@ CREATE TABLE IF NOT EXISTS `offer` (
   `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_offer`),
   FULLTEXT KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4;
 
 -- Volcando datos para la tabla tesis_luz.offer: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `offer` DISABLE KEYS */;
@@ -237,7 +237,7 @@ CREATE TABLE IF NOT EXISTS `offer_service` (
   KEY `FK_offer_service_service` (`id_service`),
   CONSTRAINT `FK_offer_service_offer` FOREIGN KEY (`id_offer`) REFERENCES `offer` (`id_offer`),
   CONSTRAINT `FK_offer_service_service` FOREIGN KEY (`id_service`) REFERENCES `service` (`id_service`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4;
 
 -- Volcando datos para la tabla tesis_luz.offer_service: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `offer_service` DISABLE KEYS */;
@@ -264,7 +264,7 @@ CREATE TABLE IF NOT EXISTS `person` (
   KEY `FK_person_ubigeo` (`id_ubigeo`),
   FULLTEXT KEY `Search` (`firstname`,`lastname`,`document_number`) /*!80000 INVISIBLE */,
   CONSTRAINT `FK_person_ubigeo` FOREIGN KEY (`id_ubigeo`) REFERENCES `ubigeo` (`id_ubigeo`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4;
 
 -- Volcando datos para la tabla tesis_luz.person: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `person` DISABLE KEYS */;
@@ -303,7 +303,7 @@ CREATE TABLE IF NOT EXISTS `position_office` (
   `update_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_position`),
   FULLTEXT KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4;
 
 -- Volcando datos para la tabla tesis_luz.position_office: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `position_office` DISABLE KEYS */;
@@ -319,7 +319,7 @@ CREATE TABLE IF NOT EXISTS `quote` (
   `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`quote_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4;
 
 -- Volcando datos para la tabla tesis_luz.quote: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `quote` DISABLE KEYS */;
@@ -388,7 +388,7 @@ CREATE TABLE IF NOT EXISTS `quote_item` (
   KEY `FK_quote_item_service` (`service_id`),
   CONSTRAINT `FK_quote_item_quote` FOREIGN KEY (`quote_id`) REFERENCES `quote` (`quote_id`),
   CONSTRAINT `FK_quote_item_service` FOREIGN KEY (`service_id`) REFERENCES `service` (`id_service`)
-) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4;
 
 -- Volcando datos para la tabla tesis_luz.quote_item: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `quote_item` DISABLE KEYS */;
@@ -484,7 +484,7 @@ CREATE TABLE IF NOT EXISTS `request` (
   CONSTRAINT `FK__offer` FOREIGN KEY (`id_offer`) REFERENCES `offer` (`id_offer`),
   CONSTRAINT `FK_request_quote` FOREIGN KEY (`quote_id`) REFERENCES `quote` (`quote_id`),
   CONSTRAINT `FK_request_status_request` FOREIGN KEY (`id_request_status`) REFERENCES `status_request` (`id_status`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4;
 
 -- Volcando datos para la tabla tesis_luz.request: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `request` DISABLE KEYS */;
@@ -531,7 +531,7 @@ CREATE TABLE IF NOT EXISTS `request_history` (
   KEY `FK_request_history_request` (`id_request`),
   CONSTRAINT `FK_request_history_request` FOREIGN KEY (`id_request`) REFERENCES `request` (`id_request`),
   CONSTRAINT `FK_request_history_status_request` FOREIGN KEY (`id_status_request`) REFERENCES `status_request` (`id_status`)
-) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4;
 
 -- Volcando datos para la tabla tesis_luz.request_history: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `request_history` DISABLE KEYS */;
@@ -610,7 +610,7 @@ CREATE TABLE IF NOT EXISTS `request_item` (
   KEY `FK_request_item_request` (`id_request`),
   CONSTRAINT `FK_request_item_request` FOREIGN KEY (`id_request`) REFERENCES `request` (`id_request`),
   CONSTRAINT `FK_request_item_service` FOREIGN KEY (`id_service`) REFERENCES `service` (`id_service`)
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4;
 
 -- Volcando datos para la tabla tesis_luz.request_item: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `request_item` DISABLE KEYS */;
@@ -675,7 +675,7 @@ CREATE TABLE IF NOT EXISTS `service` (
   `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_service`),
   FULLTEXT KEY `title` (`title`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4;
 
 -- Volcando datos para la tabla tesis_luz.service: ~4 rows (aproximadamente)
 /*!40000 ALTER TABLE `service` DISABLE KEYS */;
@@ -698,7 +698,7 @@ CREATE TABLE IF NOT EXISTS `status_request` (
   `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_status`),
   FULLTEXT KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4;
 
 -- Volcando datos para la tabla tesis_luz.status_request: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `status_request` DISABLE KEYS */;
@@ -724,7 +724,7 @@ CREATE TABLE IF NOT EXISTS `ubigeo` (
   `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_ubigeo`),
   FULLTEXT KEY `code_name` (`code`,`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4;
 
 -- Volcando datos para la tabla tesis_luz.ubigeo: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `ubigeo` DISABLE KEYS */;
@@ -741,7 +741,7 @@ CREATE TABLE IF NOT EXISTS `user_rol` (
   `update_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_role`),
   FULLTEXT KEY `code_status` (`code`,`nombre`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4;
 
 -- Volcando datos para la tabla tesis_luz.user_rol: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `user_rol` DISABLE KEYS */;
