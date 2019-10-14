@@ -134,8 +134,8 @@ CREATE TABLE IF NOT EXISTS `employee` (
   `id_area` int(10) unsigned NOT NULL,
   `id_position` int(10) unsigned NOT NULL,
   `status` tinyint(3) unsigned NOT NULL,
-  `create_at` varchar(15) NOT NULL DEFAULT NULL,
-  `update_at` varchar(15) NOT NULL DEFAULT NULL,
+  `create_at` varchar(50) DEFAULT NULL,
+  `update_at` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id_employee`),
   KEY `FK__person` (`id_person`),
   KEY `FK_employee_area` (`id_area`),
@@ -292,8 +292,8 @@ CREATE TABLE IF NOT EXISTS `position_office` (
   `name` varchar(50) NOT NULL,
   `detail` varchar(255) DEFAULT NULL,
   `status` tinyint(3) unsigned NOT NULL,
-  `create_at` varchar(15) NOT NULL DEFAULT NULL,
-  `update_at` varchar(15) NOT NULL DEFAULT NULL,
+  `create_at` varchar(50) DEFAULT NULL,
+  `update_at` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id_position`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
