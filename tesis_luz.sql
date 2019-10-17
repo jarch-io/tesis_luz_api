@@ -210,7 +210,7 @@ CREATE TABLE IF NOT EXISTS `offer` (
   `to` varchar(15) NOT NULL,
   `create_at` varchar(50) DEFAULT NULL,
   `update_at` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`id_offer`),
+  PRIMARY KEY (`id_offer`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla tesis_luz.offer: ~0 rows (aproximadamente)
