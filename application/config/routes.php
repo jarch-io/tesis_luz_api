@@ -53,6 +53,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
+#login
+$route['v1/auth']['options'] = "REST/v1/auth/Auth/nullable";
+$route['v1/auth']['post'] = "REST/v1/auth/Auth/login";
+
 #customers
 
 $route['v1/quotes']['options'] = "REST/v1/quotes/Quote/nullable";
@@ -77,3 +81,6 @@ $route['v1/secure/requests/(:num)/assigns']['options'] = "REST/v1/secure/request
 $route['v1/secure/requests/(:num)/assigns']['put'] = "REST/v1/secure/requests/Request/assign/$1";
 $route['v1/secure/requests/(:num)/comments']['options'] = "REST/v1/secure/requests/Request/nullable";
 $route['v1/secure/requests/(:num)/comments']['post'] = "REST/v1/secure/requests/Request/addComment/$1";
+
+$route['v1/secure/users/employees']['options'] = "REST/v1/secure/users/Employee/nullable";
+$route['v1/secure/users/employees']['post'] = "REST/v1/secure/users/Employee/create";
