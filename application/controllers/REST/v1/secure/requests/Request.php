@@ -1,7 +1,17 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Request extends CI_Controller {
+class Request extends MY_Controller {
+
+	public function __construct()
+	{
+		parent::__construct();
+	}
+
+	protected function middleware()
+	{
+		return array('admin|only:assign', 'employee|except:nullable,assign');
+	}
 
 	public function getById(int $requestId)
 	{
@@ -32,7 +42,7 @@ class Request extends CI_Controller {
 			
 			$response = array(
 				'code' => 200,
-				'requests' => $this->Request_model->listar($querys)
+				'requests' => $this->Request_model->listar(is_null($querys) ? array() : $querys)
 			);
 		}catch(\Exception $e){
 			$response = array(

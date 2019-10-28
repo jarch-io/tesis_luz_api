@@ -9,7 +9,7 @@ class Auth extends CI_Controller {
 			$this->load->model('secure/UserEmployee_model', '', TRUE);
 			$employee = json_decode($this->security->xss_clean($this->input->raw_input_stream), true);
 
-			$employeeUser = $this->UserEmployee_model->login($employee);
+			$employeeUser = $this->UserEmployee_model->login($employee['user']);
 
 			$response = array(
 				'code' => 200,
@@ -17,7 +17,8 @@ class Auth extends CI_Controller {
 				'auth' => array(
 					'token' => AUTHORIZATION::generateToken(array(
 						'userId' => $employeeUser['id'],
-						'roleCode' => $employeeUser['roleCode']
+						'roleCode' => $employeeUser['roleCode'],
+						'employeeId' => $employeeUser['idEmployee']
 					))
 				),
 				'user' => array(
@@ -43,6 +44,22 @@ class Auth extends CI_Controller {
 		}finally {
 			$this->response = $response;
 		}
+	}
+
+	public function forbidden()
+	{
+		$this->response = array(
+			'code' => 403,
+			'message' => "No puede realizar esta accion."
+		);
+	}
+
+	public function unauthorized()
+	{
+		$this->response = array(
+			'code' => 401,
+			'message' => ""
+		);
 	}
 
 	public function nullable()

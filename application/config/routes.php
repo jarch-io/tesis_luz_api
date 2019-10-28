@@ -57,6 +57,9 @@ $route['translate_uri_dashes'] = FALSE;
 $route['v1/auth']['options'] = "REST/v1/auth/Auth/nullable";
 $route['v1/auth']['post'] = "REST/v1/auth/Auth/login";
 
+$route['v1/auth/vbnjhfghjuhng455']['get'] = "REST/v1/auth/Auth/forbidden";
+$route['v1/auth/uhfgdhjgnvcmdjfghnvcmk85']['get'] = "REST/v1/auth/Auth/unauthorized";
+
 #customers
 
 $route['v1/quotes']['options'] = "REST/v1/quotes/Quote/nullable";

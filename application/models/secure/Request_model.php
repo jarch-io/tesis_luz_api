@@ -98,7 +98,7 @@ class Request_model extends CI_Model {
 	{
 		$requests = $this->db->select('*');
 
-		if(!empty($filters = $querys['filter'])) {
+		if(isset($querys['filter']) && !empty($filters = $querys['filter'])) {
 			if(isset($filters['adviser']) && $filters['adviser'] == '_NULL_') $requests->where('id_employee IS NULL', null, false);
 			if(isset($filters['adviser']) && $filters['adviser'] == '_ME_') $requests->where('id_employee', 1);
 
