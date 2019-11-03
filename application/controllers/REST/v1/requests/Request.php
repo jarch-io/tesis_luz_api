@@ -93,6 +93,29 @@ class Request extends CI_Controller {
 		}
 	}
 
+	public function setRating(int $requestId)
+	{
+		try{
+			$this->load->model('Request_model', '', TRUE);
+
+			$data = json_decode($this->security->xss_clean($this->input->raw_input_stream), true);
+
+			$response = array(
+				'code' => 201,
+				'response' => $this->Request_model->setRating($requestId, $data['rating'])
+			);
+		}catch(\Exception $e){
+			$response = array(
+				'code' => $e->getCode(),
+				'message' => $e->getMessage()
+			);
+
+			if(isset($errors)) $response['errors'] = $errors;
+		}finally {
+			$this->response = $response;
+		}
+	}
+
 	public function getById(int $requestId)
 	{
 		try{

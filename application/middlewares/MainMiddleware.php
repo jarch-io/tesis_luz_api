@@ -8,6 +8,9 @@ class MainMiddleware
 	protected $ci;
 
 	public $roles = array();
+
+	protected $code = 500;
+	protected $messages = 'Server error';
 	
 	public function __construct($controller, $ci)
 	{
@@ -28,7 +31,18 @@ class MainMiddleware
 
 			$this->ci->authUser = $user;
 		}catch(\Exception $e){
-			throw new \Exception($e->getMessage(), $e->getCode());
+			throw new \Exception($e->getMessage(), $e->getCode() == 0 ? 401 : $e->getCode());
 		}
+	}
+
+	public function resolveResponse()
+	{
+		$this->ci->output->set_content_type('application/json')
+					->set_output(json_encode(array(
+						'code' => $this->code,
+						'message' => $this->message
+					)))
+					->set_status_header(isset($this->code) ? $this->code : 400);
+		die;
 	}
 }

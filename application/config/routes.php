@@ -74,6 +74,8 @@ $route['v1/requests/(:num)']['options'] = "REST/v1/requests/Request/nullable";
 $route['v1/requests/(:num)']['get'] = "REST/v1/requests/Request/getById/$1";
 $route['v1/requests/(:num)/comments']['options'] = "REST/v1/requests/Request/nullable";
 $route['v1/requests/(:num)/comments']['post'] = "REST/v1/requests/Request/addComment/$1";
+$route['v1/requests/(:num)/rating']['options'] = "REST/v1/requests/Request/nullable";
+$route['v1/requests/(:num)/rating']['put'] = "REST/v1/requests/Request/setRating/$1";
 
 $route['v1/services']['get'] = "REST/v1/services/Service/list";
 
@@ -86,4 +88,10 @@ $route['v1/secure/requests/(:num)/comments']['options'] = "REST/v1/secure/reques
 $route['v1/secure/requests/(:num)/comments']['post'] = "REST/v1/secure/requests/Request/addComment/$1";
 
 $route['v1/secure/users/employees']['options'] = "REST/v1/secure/users/Employee/nullable";
-$route['v1/secure/users/employees']['post'] = "REST/v1/secure/users/Employee/create";
+
+$route['v1/secure/employees']['options'] = "REST/v1/secure/users/Employee/nullable";
+$route['v1/secure/employees']['get'] = "REST/v1/secure/users/Employee/list";
+$route['v1/secure/employees']['post'] = "REST/v1/secure/users/Employee/create";
+
+$route['v1/secure/reports/requests/status']['options'] = "REST/v1/secure/reports/Request/nullable";
+$route['v1/secure/reports/requests/status']['get'] = "REST/v1/secure/reports/Request/status";

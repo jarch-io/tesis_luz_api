@@ -46,7 +46,9 @@ class Quote_model extends CI_Model {
 			if(empty($items)) throw new \Exception("Ingrese al menos un servicio para agregar", 400);
 
 			$this->db->insert('quote', array(
-				'status' => 1
+				'status' => 1,
+				'create_at' => date('Y-m-d H:i:s'),
+				'update_at' => date('Y-m-d H:i:s')
 			));
 
 			$quoteId = $this->db->insert_id();
@@ -57,7 +59,9 @@ class Quote_model extends CI_Model {
 				$services[] = array(
 					'quote_id' => $quoteId,
 					'service_id' => $service['id'],
-					'quantity' => $service['quantity']
+					'quantity' => $service['quantity'],
+					'create_at' => date('Y-m-d H:i:s'),
+					'update_at' => date('Y-m-d H:i:s')
 				);
 			}
 
@@ -86,7 +90,9 @@ class Quote_model extends CI_Model {
 					$services[] = array(
 						'quote_id' => $quoteId,
 						'service_id' => $service['id'],
-						'quantity' => $service['quantity']
+						'quantity' => $service['quantity'],
+						'create_at' => date('Y-m-d H:i:s'),
+						'update_at' => date('Y-m-d H:i:s')
 					);
 				}
 
@@ -100,7 +106,8 @@ class Quote_model extends CI_Model {
 					$this->db->where('item_id', $service['id'])
 							->update('quote_item', array(
 								'service_id' => $service['id'],
-								'quantity' => $service['quantity']
+								'quantity' => $service['quantity'],
+								'update_at' => date('Y-m-d H:i:s')
 							));
 				}
 			}

@@ -10,7 +10,7 @@ class Request extends MY_Controller {
 
 	protected function middleware()
 	{
-		return array('admin|only:assign', 'employee|except:nullable,assign');
+		return array('admin|only:assign|except:nullable', 'employee|except:nullable');
 	}
 
 	public function getById(int $requestId)

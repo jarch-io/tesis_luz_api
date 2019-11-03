@@ -15,7 +15,9 @@ class UserEmployee_model extends CI_Model {
 				'password' => $employee['password'],
 				'hash' => password_hash($employee['password'], PASSWORD_DEFAULT),
 				'status' => $employee['status'],
-				'id_role' => $employee['idRole']
+				'id_role' => $employee['idRole'],
+				'create_at' => date('Y-m-d H:i:s'),
+				'update_at' => date('Y-m-d H:i:s')
 			));
 
 			return array(
@@ -36,7 +38,7 @@ class UserEmployee_model extends CI_Model {
 							->join('employee', 'employee.id_employee = employee_user.id_employee')
 							->join('person', 'person.id_person = employee.id_person')
 							->join('user_role', 'user_role.id_role = employee_user.id_role')
-							->join('area', 'area.id_area = employee.id_employee')
+							->join('area', 'area.id_area = employee.id_area')
 							->join('position_office', 'position_office.id_position = employee.id_position')
 							->get()
 							->result_array();
@@ -45,6 +47,31 @@ class UserEmployee_model extends CI_Model {
 
 			return $user[0];
 		}catch(Exception $e) {
+			throw new \Exception($e->getMessage(), $e->getCode());
+		}
+	}
+
+	public function listar(array $querys = array())
+	{
+		if(isset($querys['search'])) return $this->_search($querys);
+	}
+
+	private function _search(array $querys = array())
+	{
+		try {
+			$results = $this->db->select('person.firstname, person.lastname, employee.id_employee, person.email')
+					->like('person.firstname', $querys['search'])
+					->or_like('person.firstname', $querys['search'])
+					->or_like('person.email', $querys['search'])
+					->or_like('person.document_number', $querys['search'])
+					->from('employee_user')
+					->join('employee', 'employee.id_employee = employee_user.id_employee')
+					->join('person', 'person.id_person = employee.id_person')
+					->get()
+					->result_array();
+
+			return $results;
+		}catch(\Exception $e) {
 			throw new \Exception($e->getMessage(), $e->getCode());
 		}
 	}

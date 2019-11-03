@@ -12,17 +12,9 @@ class AdminMiddleware extends MainMiddleware
 			if($this->ci->authUser->roleCode != 'admin_role') throw new \Exception("No tienes permisos para realizar esta accion.", 403);
 			
 		}catch(\Exception $e){
-			switch ($e->getCode()) {
-				case 401:
-					redirect('/v1/auth/uhfgdhjgnvcmdjfghnvcmk85');
-					break;
-				case 403:
-					redirect('/v1/auth/vbnjhfghjuhng455');
-					break;
-				default:
-					redirect('/v1/auth/uhfgdhjgnvcmdjfghnvcmk85');
-					break;
-			}		
+			$this->code = $e->getCode();
+			$this->message = $e->getMessage();
+			parent::resolveResponse();
 		}
 	}
 }

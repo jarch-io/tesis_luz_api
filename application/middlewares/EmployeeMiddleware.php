@@ -9,20 +9,12 @@ class EmployeeMiddleware extends MainMiddleware
 		try{
 			parent::run();
 
-			if($this->ci->authUser->roleCode != 'employee_role') throw new \Exception("No tienes permisos para realizar esta accion.", 403);
+			if(!preg_match("/employee_role|admin_role/", $this->ci->authUser->roleCode)) throw new \Exception("No tienes permisos para realizar esta accion.", 403);
 			
 		}catch(\Exception $e){
-			switch ($e->getCode()) {
-				case 401:
-					redirect('/v1/auth/uhfgdhjgnvcmdjfghnvcmk85');
-					break;
-				case 403:
-					redirect('/v1/auth/vbnjhfghjuhng455');
-					break;
-				default:
-					redirect('/v1/auth/uhfgdhjgnvcmdjfghnvcmk85');
-					break;
-			}		
+			$this->code = $e->getCode();
+			$this->message = $e->getMessage();
+			parent::resolveResponse();		
 		}
 	}
 }

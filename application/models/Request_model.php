@@ -27,6 +27,7 @@ class Request_model extends CI_Model {
 			'created' => $request->create_at,
 			'updated' => $request->update_at,
 			'isClosed' => (bool) $request->is_closed,
+			'rating' => (int) $request->satisfactory_rating,
 			'services' => array(),
 			'offers' => array(),
 			'progress' => array(),
@@ -97,6 +98,24 @@ class Request_model extends CI_Model {
 
 		$requestObject['history'] = $this->getHistory($requestId);
 
+		$statusList = $this->db->order_by('position')
+								->where('status', 1)
+								->get('status_request')
+								->result_array();
+
+		$progress = array();
+
+		foreach ($statusList as $status) {
+			$progress[] = array(
+				'id' => $status['id_status'],
+				'name' => $status['name'],
+				'detail' => $status['detail'],
+				'isCurrent' => $status['id_status'] == $request->id_request_status
+			);
+		}
+
+		$requestObject['progress'] = $progress;
+
 		return $requestObject;
 	}
 
@@ -119,7 +138,9 @@ class Request_model extends CI_Model {
 					'phone' => $customer['phone'] ?? '',
 					'email' => $customer['email'] ?? '',
 					'street' => $customer['street'] ?? '',
-					'state' => 1
+					'state' => 1,
+					'create_at' => date('Y-m-d H:i:s'),
+					'update_at' => date('Y-m-d H:i:s')
 				));
 			}else {
 				$this->db->insert('person', array(
@@ -131,7 +152,9 @@ class Request_model extends CI_Model {
 					'street' => $customer['street'] ?? '',
 					'document_type' => $customer['documentType'] ?? '',
 					'document_number' => $customer['document'] ?? '',
-					'state' => 1
+					'state' => 1,
+					'create_at' => date('Y-m-d H:i:s'),
+					'update_at' => date('Y-m-d H:i:s')
 				));
 			}
 
@@ -141,7 +164,9 @@ class Request_model extends CI_Model {
 				'type' => $customer['isCompany'] ? 'company' : 'person',
 				'id_company' => $customer['isCompany'] ? $customerId : null,
 				'id_person' => $customer['isCompany'] ? null : $customerId,
-				'status' => 1
+				'status' => 1,
+				'create_at' => date('Y-m-d H:i:s'),
+				'update_at' => date('Y-m-d H:i:s')
 			));
 
 			$customerMainId = $this->db->insert_id();
@@ -154,7 +179,9 @@ class Request_model extends CI_Model {
 				'id_customer' => $customerMainId,
 				'id_request_status' => 1,
 				'quote_id' => $request['quote']['id'],
-				'detail' => $request['additionals']['comment'] ?? ''
+				'detail' => $request['additionals']['comment'] ?? '',
+				'create_at' => date('Y-m-d H:i:s'),
+				'update_at' => date('Y-m-d H:i:s')
 			));
 
 			$requestId = $this->db->insert_id();
@@ -166,7 +193,9 @@ class Request_model extends CI_Model {
 					'quantity' => $service['quantity'],
 					'price' => $service['price'],
 					'discount' => 0,
-					'amount' => $service['quantity'] * $service['price']
+					'amount' => $service['quantity'] * $service['price'],
+					'create_at' => date('Y-m-d H:i:s'),
+					'update_at' => date('Y-m-d H:i:s')
 				));
 			}
 
@@ -179,9 +208,11 @@ class Request_model extends CI_Model {
 			$this->db->insert('request_history', array(
 				'id_status_request' => 1,
 				'id_request' => $requestId,
-				'comment' => $request['additionals']['comment'] ?? '',
+				'comment' => $request['additionals']['comment'] ?? 'Solicitud creada.',
 				'from_type' => 'customer',
-				'from_id' => $customerMainId
+				'from_id' => $customerMainId,
+				'create_at' => date('Y-m-d H:i:s'),
+				'update_at' => date('Y-m-d H:i:s')
 			));
 
 			if($this->db->trans_status() === FALSE) throw new \Exception("No se puedo crear la solicitud.", 500);
@@ -201,11 +232,22 @@ class Request_model extends CI_Model {
 
 	public function getHistory(int $requestId)
 	{
-		return $this->db->select('id_request_history AS id, id_status_request AS status, comment AS message, from_type AS type, from_id AS agent, create_at AS createAt, update_at AS updateAt')
-							->where('id_request', $requestId)
-							->order_by('update_at', 'desc')
-							->get('request_history')
+		return $this->db->select('request_history.id_request_history AS id, request_history.id_status_request AS status, status_request.name AS statusName, status_request.detail, request_history.comment AS message, request_history.from_type AS type, request_history.from_id AS agent, request_history.create_at AS createAt, request_history.update_at AS updateAt')
+							->where('request_history.id_request', $requestId)
+							->order_by('request_history.update_at', 'desc')
+							->from('request_history')
+							->join('status_request', 'status_request.id_status = request_history.id_status_request', 'left')
+							->get()
 							->result_array();
+	}
+
+	public function setRating(int $requestId, int $rating)
+	{
+		$this->db->set('satisfactory_rating', $rating)
+					->where('id_request', $requestId)
+					->update('request');
+
+		return true;
 	}
 
 	public function addComment(int $requestId, array $comment)
@@ -213,12 +255,21 @@ class Request_model extends CI_Model {
 		try {
 			$this->db->trans_start();
 
+			if(isset($comment['cancel']) && $comment['cancel']) {
+				$this->db->set('id_request_status', 5)
+							->set('update_at', date('Y-m-d H:i:s'))
+							->where('id_request', $requestId)
+							->update('request');
+			}
+
 			$this->db->insert('request_history', array(
-				'id_status_request' => null,
+				'id_status_request' => !$comment['cancel'] ? null : 5,
 				'id_request' => $requestId,
 				'comment' => $comment['message'] ?? '',
 				'from_type' => 'customer',
-				'from_id' => $comment['fromId']
+				'from_id' => $comment['fromId'],
+				'create_at' => date('Y-m-d H:i:s'),
+				'update_at' => date('Y-m-d H:i:s')
 			));
 
 			if($this->db->trans_status() === FALSE) throw new \Exception("No se puedo agregar el comentario.", 500);

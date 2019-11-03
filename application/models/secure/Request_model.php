@@ -1,4 +1,5 @@
 <?php
+
 class Request_model extends CI_Model {
 
 	public function __construct()
@@ -97,10 +98,10 @@ class Request_model extends CI_Model {
 	public function listar(array $querys = array())
 	{
 		$requests = $this->db->select('*');
-
+		
 		if(isset($querys['filter']) && !empty($filters = $querys['filter'])) {
 			if(isset($filters['adviser']) && $filters['adviser'] == '_NULL_') $requests->where('id_employee IS NULL', null, false);
-			if(isset($filters['adviser']) && $filters['adviser'] == '_ME_') $requests->where('id_employee', 1);
+			if(isset($filters['adviser']) && $filters['adviser'] == '_ME_') $requests->where('id_employee', $this->authUser->employeeId);
 
 			if(isset($filters['isClosed'])) $requests->where('is_closed =', (int) $filters['isClosed']);
 		}
@@ -174,7 +175,10 @@ class Request_model extends CI_Model {
 
 	public function assign(int $requestId, array $adviser)
 	{
+		if($adviser['id'] == '__ME__') return array();
+
 		$this->db->set('id_employee', $adviser['id'] == '_ME_' ? 1 : $adviser['id'])
+					->set('update_at', date('Y-m-d H:i:s'))
 					->where('id_request', $requestId)
 					->update('request');
 
@@ -183,10 +187,12 @@ class Request_model extends CI_Model {
 
 	public function getHistory(int $requestId)
 	{
-		return $this->db->select('id_request_history AS id, id_status_request AS status, comment AS message, from_type AS type, from_id AS agent, create_at AS createAt, update_at AS updateAt')
-							->where('id_request', $requestId)
-							->order_by('update_at', 'desc')
-							->get('request_history')
+		return $this->db->select('request_history.id_request_history AS id, request_history.id_status_request AS status, status_request.name AS statusName, status_request.detail, request_history.comment AS message, request_history.from_type AS type, request_history.from_id AS agent, request_history.create_at AS createAt, request_history.update_at AS updateAt')
+							->where('request_history.id_request', $requestId)
+							->order_by('request_history.update_at', 'desc')
+							->from('request_history')
+							->join('status_request', 'status_request.id_status = request_history.id_status_request', 'left')
+							->get()
 							->result_array();
 	}
 
@@ -195,12 +201,27 @@ class Request_model extends CI_Model {
 		try {
 			$this->db->trans_start();
 
+			if(isset($comment['status'])) {
+				$updatedValues = array('id_request_status' => $comment['status']);
+
+				$updatedValues['update_at'] = date('Y-m-d H:i:s');
+
+				if($comment['status'] == 7) {
+					$updatedValues['is_closed'] = 1;
+				}
+
+				$this->db->where('id_request', $requestId)
+							->update('request', $updatedValues);
+			}
+
 			$this->db->insert('request_history', array(
-				'id_status_request' => null,
+				'id_status_request' => isset($comment['status']) ? $comment['status'] : null,
 				'id_request' => $requestId,
 				'comment' => $comment['message'] ?? '',
 				'from_type' => 'adviser',
-				'from_id' => 1
+				'from_id' => $this->authUser->employeeId,
+				'create_at' => date('Y-m-d H:i:s'),
+				'update_at' => date('Y-m-d H:i:s')
 			));
 
 			if($this->db->trans_status() === FALSE) throw new \Exception("No se puedo agregar el comentario.", 500);
