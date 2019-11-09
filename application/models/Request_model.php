@@ -14,7 +14,7 @@ class Request_model extends CI_Model {
 							->get('request')
 							->result_object()[0];
 
-		$requestItems = $this->db->select('service.id_service, service.title, service.images, request_item.price, request_item.quantity, request_item.discount, request_item.amount, request_item.create_at, request_item.update_at, request_item.id_item')
+		$requestItems = $this->db->select('service.id_service, service.title, service.images, request_item.price, request_item.quantity, request_item.discount, request_item.amount, request_item.create_at, request_item.update_at, request_item.id_item, service.parent_id, service.type')
 							->where('request_item.id_request', $requestId)
 							->from('request_item')
 							->join('service', 'service.id_service = request_item.id_service')
@@ -58,6 +58,16 @@ class Request_model extends CI_Model {
 		}
 
 		foreach ($requestItems as $service) {
+			if($service['type'] == 'simple' && !empty($service['parent_id'])) {
+				$parentService = $this->db->where('id_service', $service['parent_id'])
+										->get('service')
+										->result_object();
+
+				if(!empty($parentService)) {
+					$service['title'] = "{$parentService[0]->title} - {$service['title']}";
+				}
+			}
+
 			$requestObject['services'][] = array(
 				'id' => (int) $service['id_item'],
 				'quantity' => (int) $service['quantity'],

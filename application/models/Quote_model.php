@@ -23,6 +23,17 @@ class Quote_model extends CI_Model {
 		);
 
 		foreach ($items as $service) {
+			if($service['type'] == 'simple' && !empty($service['parent_id'])) {
+				$parentService = $this->db->where('id_service', $service['parent_id'])
+										->get('service')
+										->result_object();
+
+				if(!empty($parentService)) {
+					$service['title'] = "{$parentService[0]->title} - {$service['title']}";
+					$service['images'] = $parentService[0]->images;
+				}
+			}
+
 			$quoteResponse['items'][] = array(
 				'id' => (int) $service['item_id'],
 				'quantity' => (int) $service['quantity'],
