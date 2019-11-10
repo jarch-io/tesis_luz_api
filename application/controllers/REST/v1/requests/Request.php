@@ -137,6 +137,28 @@ class Request extends CI_Controller {
 		}
 	}
 
+	public function find()
+	{
+		try{
+			$this->load->model('Request_model', '', TRUE);
+			$querys = json_decode($this->security->xss_clean($this->input->get('query')), true);
+
+			$response = array(
+				'code' => 200,
+				'request' => $this->Request_model->findId($querys)
+			);
+		}catch(\Exception $e){
+			$response = array(
+				'code' => $e->getCode(),
+				'message' => $e->getMessage()
+			);
+
+			if(isset($errors)) $response['errors'] = $errors;
+		}finally {
+			$this->response = $response;
+		}
+	}
+
 	public function addComment(int $requestId)
 	{
 		try{

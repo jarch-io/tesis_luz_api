@@ -72,6 +72,7 @@ $route['v1/quotes/(:num)']['put'] = "REST/v1/quotes/Quote/update/$1";
 $route['v1/quotes/(:num)']['get'] = "REST/v1/quotes/Quote/getById/$1";
 
 $route['v1/requests']['options'] = "REST/v1/requests/Request/nullable";
+$route['v1/requests']['get'] = "REST/v1/requests/Request/find";
 $route['v1/requests']['post'] = "REST/v1/requests/Request/create";
 $route['v1/requests/(:num)']['options'] = "REST/v1/requests/Request/nullable";
 $route['v1/requests/(:num)']['get'] = "REST/v1/requests/Request/getById/$1";
@@ -98,3 +99,5 @@ $route['v1/secure/employees']['post'] = "REST/v1/secure/users/Employee/create";
 
 $route['v1/secure/reports/requests/status']['options'] = "REST/v1/secure/reports/Request/nullable";
 $route['v1/secure/reports/requests/status']['get'] = "REST/v1/secure/reports/Request/status";
+$route['v1/secure/reports/tracker/requests']['options'] = "REST/v1/secure/reports/Track/nullable";
+$route['v1/secure/reports/tracker/requests']['get'] = "REST/v1/secure/reports/Track/requests";

@@ -8,6 +8,21 @@ class Request_model extends CI_Model {
 		$this->secretMessage = 'platon E anaxoras';
 	}
 
+	public function findId(array $querys)
+	{
+		$where = array();
+
+		if(isset($querys['code'])) $where['code'] = $querys['code'];
+
+		$data = $this->db->select('code, id_request AS id')->where($where)
+							->get('request')
+							->result_object();
+
+		if(empty($data)) return null;
+
+		return $data[0];
+	}
+
 	public function getById(int $requestId)
 	{
 		$request = $this->db->where(array('id_request' => $requestId))
@@ -182,7 +197,7 @@ class Request_model extends CI_Model {
 			$customerMainId = $this->db->insert_id();
 
 			//$requestCode = $this->encrypt->encode(date('U') . $this->security->get_random_bytes(5), $this->secretMessage);
-			$requestCode = str_shuffle(date('U') . 'dmskadm4g5f4gSADASDAD345345!$#$%&%&$');
+			$requestCode = str_shuffle(date('U') . 'dmskadm4g5f4gSADASDAD345345!$#64DSD685941234567890axmsdnuhwj$');
 
 			$this->db->insert('request', array(
 				'code' => $requestCode,
